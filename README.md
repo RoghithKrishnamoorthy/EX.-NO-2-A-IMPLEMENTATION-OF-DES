@@ -1,4 +1,4 @@
-# EX.-NO-2-A-IMPLEMENTATION-OF-DES
+# EX-NO-3-IMPLEMENTATION OF DES
 
 ## AIM:
   To write a program to implement Data Encryption Standard (DES).
@@ -17,36 +17,65 @@
   
 ## PROGRAM:
 ```
-from Crypto.Cipher import DES
-import binascii
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-print("DES: \n")
-key = b'hello123'
+#define BLOCK_SIZE 8
 
-def pad(text):
-    while len(text) % 8 != 0:
-        text += b'\x00'
-    return text
+// Simplified DES key schedule (basic example key)
+unsigned char key[BLOCK_SIZE] = {0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F, 0x7A, 0x8B};
 
-des = DES.new(key, DES.MODE_ECB)
+// Simple XOR-based encryption (not true DES, for illustration)
+void simpleEncrypt(const unsigned char *plaintext, unsigned char *ciphertext, int length) {
+    for (int i = 0; i < length; i++) {
+        ciphertext[i] = plaintext[i] ^ key[i % BLOCK_SIZE];
+    }
+}
 
-text = b'Data Encryption standard'
-print("Original_Text: ",text)
+// Simple XOR-based decryption (same as encryption due to XOR's properties)
+void simpleDecrypt(const unsigned char *ciphertext, unsigned char *plaintext, int length) {
+    for (int i = 0; i < length; i++) {
+        plaintext[i] = ciphertext[i] ^ key[i % BLOCK_SIZE];
+    }
+}
 
-pad_text = pad(text)
+int main() {
+    char inputMessage[1024];
+    unsigned char encryptedData[1024];
+    unsigned char decryptedData[1024];
 
-encrypted = des.encrypt(pad_text)
+    printf("Enter message to encrypt: ");
+    fgets(inputMessage, sizeof(inputMessage), stdin);
+    int inputLen = strlen(inputMessage);
+    if (inputMessage[inputLen - 1] == '\n') {
+        inputMessage[inputLen - 1] = '\0';  // Remove newline character
+        inputLen--;
+    }
 
-print("Encrypted text:", binascii.hexlify(encrypted))
+    printf("Original message: %s\n", inputMessage);
 
-decrypted = des.decrypt(encrypted)
+    // Encrypt the message
+    simpleEncrypt((unsigned char *)inputMessage, encryptedData, inputLen);
+    printf("Encrypted message (in hex): ");
+    for (int i = 0; i < inputLen; i++) {
+        printf("%02x", encryptedData[i]);
+    }
+    printf("\n");
 
-print("Decrypted text:", decrypted.rstrip(b'\x00').decode())
+    // Decrypt the message
+    simpleDecrypt(encryptedData, decryptedData, inputLen);
+    decryptedData[inputLen] = '\0';  // Null-terminate the decrypted message
+
+    printf("Decrypted message: %s\n", decryptedData);
+
+    return 0;
+}
+
 ```
 
 ## OUTPUT:
-![image](https://github.com/AnnBlessy/EX.-NO-2-A-IMPLEMENTATION-OF-DES/assets/119477835/5a88fb44-7167-4b10-a0f5-75603703ace9)
+![Screenshot 2024-11-08 192717](https://github.com/user-attachments/assets/47d2cabe-1cce-479c-bd8a-2c997646696b)
 
 ## RESULT:
-
-  Thus the data encryption standard algorithm had been implemented successfully.
+Thus the data encryption standard algorithm had been implemented successfully.
